@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+
+<title>bigHair - SVG</title>
+
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+
+<!-- CSS---------------------------------------------------------------------------------- -->
+
+<style>
+    #gameContainer {
+        position: absolute;
+    }
+
+    /* canvas styles-------------------------------------------------------- */
+
+    .cnv {
+        position: absolute;
+    }
+
+    #bigHairCNV {
+
+        z-index: -3;
+    }
+
+    #hairBackCNV {
+        z-index: -2;
+    }
+
+    #mknCNV {
+        z-index: -1;
+    }
+
+    #frameCNV {
+        z-index: 1;
+    }
+
+    #hairFrntCNV {
+        z-index: 2;
+        /* stroke-width: 1; */
+    }
+
+
+
+
+
+    /* svg styles-------------------------------------------------------- */
+
+    #neckPathID,
+    #headPathID,
+    #facePathID,
+    #lashPathID,
+    #lip1PathID,
+    #lip2PathID {
+        stroke-width: 2px;
+        position: relative;
+    }
+
+
+    #mknSvgID {
+        z-index: -1;
+    }
+
+    /* control styles-------------------------------------------------------- */
+
+    #ctrlDiv {
+        position: relative;
+        /* display: block; */
+        /* width: 50%; */
+        background-color: rgb(199, 199, 199);
+        z-index: 6;
+    }
+
+    .main-controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+        justify-items: center;
+        column-gap: 5px;
+        background-color: white;
+    }
+
+    .hair-controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+        column-gap: 5px;
+        background-color: white;
+    }
+
+    .body-controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+        column-gap: 5px;
+        background-color: white;
+    }
+
+    .head-controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+        column-gap: 5px;
+        background-color: white;
+    }
+
+    .lip-controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+        column-gap: 5px;
+        background-color: white;
+    }
+
+    .frame-control {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+        column-gap: 5px;
+        background-color: white;
+    }
+
+    .btns {
+        -webkit-appearance: none;
+        background-color: grey;
+        width: 100%;
+        height: 30px;
+        text-align: center;
+    }
+
+    .controls-btn {
+        -webkit-appearance: none;
+        background-color: grey;
+        /* width: 100%; */
+        height: 30px;
+        text-align: center;
+    }
+
+
+
+    .sliderKnobs {
+        -webkit-appearance: none;
+
+    }
+
+    .colPicker {
+        height: 30px;
+        border: none;
+    }
+
+    input {
+        background-color: grey;
+    }
+
+    .singleKnob,
+    .sliderKnobs {
+        display: block;
+        height: 30px;
+        width: 100%;
+    }
+
+    .mainKnobs {
+        width: 100%;
+        display: block;
+        background-color: rgb(255, 255, 255);
+
+    }
+
+    select,
+    option {
+        text-align: center;
+    }
+
+    label,
+    p {
+        color: grey;
+        display: block;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: 10px;
+        text-align: center;
+    }
+
+    a {
+        color: rgb(48, 48, 48);
+        /* display: block; */
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: 10px;
+        text-align: center;
+    }
+
+    #outputField {
+        text-align: left;
+        margin-left: 10px;
+    }
+</style>
+
+
+<!-- HTML-------------------------------------------------------------------------------------- -->
+
+
+<div id="gameContainer">
+    <div id="gameDiv" class="containerTop">
+        <canvas id="bigHairCNV" class="cnv"></canvas>
+        <canvas id="hairBackCNV" class="cnv"></canvas>
+        <canvas id="mknCNV" class="cnv"></canvas>
+        <canvas id="frameCNV" class="cnv"></canvas>
+        <canvas id="hairFrntCNV" class="cnv"></canvas>
+    </div>
+
+    <div id="ctrlDiv">
+        <div id="mainCtrlDiv" class="main-controls">
+            <div id="lyrDiv" class="mainKnobs">
+                <select id="hairLayer" class="btns">
+                    <option id="backOpt" value="back">&#9776 BACK</option>
+                    <option id="frontOpt" value="front">&#9776 FRONT</option>
+                </select>
+                <label id="hairLayerLbl" for="hairLayer">LAYER</label>
+            </div>
+            <div id="lipColDiv" class="mainKnobs">
+                <input type="color" id="lipCol" class="sliderKnobs colPicker" value="#800000" />
+                <label id="lipColLbl" for="lipCol">LIPS</label>
+            </div>
+            <div id="skinColDiv" class="mainKnobs">
+                <input type="color" id="skinCol" class="sliderKnobs colPicker" value="#6b462f" />
+                <label id="skinColLbl" for="skinCol">SKIN</label>
+            </div>
+            <div id="hairColDiv" class="mainKnobs">
+                <input type="color" id="hairCol" class="sliderKnobs colPicker" value="#00ff00" />
+                <label id="hairColLbl" for="hairCol">HAIR</label>
+            </div>
+            <div id="frameColDiv" class="mainKnobs">
+                <input type="color" id="frameCol" class="sliderKnobs colPicker" value="#000000" />
+                <label id="frameColLbl" for="frameCol">FRAME</label>
+            </div>
+            <div id="bkgColDiv" class="mainKnobs">
+                <input type="color" id="bkgCol" class="sliderKnobs colPicker" value="#500000" />
+                <label id="bkgColLbl" for="bkgCol">PAGE</label>
+            </div>
+            <div id="saveBtnDiv" class="mainKnobs">
+                <button type="button" id="saveBTN" class="btns" value="save" download="file.png" href="">SAVE</button>
+                <label id="saveBTNLbl" for="saveBTN">SAVE</label>
+            </div>
+        </div>
+        <div id="chooserDiv" class="chooserKnob">
+            <select id="chooseCTRLS" class="controls-btn">
+                <option id="controlsOpt" value="controls" selected="selected">&#9776 CHOOSE CONTROLS &#9776</option>
+                <option id="bodyOpt" value="body">&#9776 BODY CONTROLS &#9776</option>
+                <option id="headOpt" value="head">&#9776 HEAD CONTROLS &#9776</option>
+                <option id="lipsOpt" value="lips">&#9776 LIP CONTROLS &#9776</option>
+                <option id="hairOpt" value="hair">&#9776 HAIR CONTROLS &#9776</option>
+                <option id="frameW" value="frame">&#9776 FRAME WIDTH &#9776</option>
+            </select>
+            <label id="chooseCTRLSLbl" for="chooseCTRLS"></label>
+        </div>
+
+        <div id="poseDiv" class="pose-controls">
+            <div id="frameDiv" class="frame-control">
+                <div id="frameWDiv" class="singleKnos">
+                    <label id="frameWLbl" for="frameWSldr"> FRAME </label>
+                    <input type="range" id="frameWSldr" class="sliderKnobs" min="1" max="7" step="0.01" />
+                </div>
+            </div>
+            <div id="hairDiv" class="hair-controls">
+                <div id="puffDiv" class="hairKnobs">
+                    <label id="gSpeedSldrLbl" for="gSpeedSldr"> PUFF </label>
+                    <input type="range" id="gSpeedSldr" class="sliderKnobs" min="1" max="7" step="0.01" />
+                </div>
+                <div id="curlDiv" class="hairKnobs">
+                    <label id="gSizeSldrLbl" for="gSizeSldr"> CURL </label>
+                    <input type="range" id="gSizeSldr" class="sliderKnobs" min="3" max="60" step="0.01" />
+                </div>
+            </div>
+            <div id="mknBodyDiv" class="body-controls">
+                <div id="bodyXDiv" class="singleKnob">
+                    <label id="mknXLbl" for="mknX"> X </label>
+                    <input type="range" id="mknX" class="sliderKnobs" min="0" max="500" step="0.01" />
+                </div>
+                <div id="bodyYDiv" class="singleKnob">
+                    <label id="mknYLbl" for="mknY"> Y </label>
+                    <input type="range" id="mknY" class="sliderKnobs" min="0" max="500" step="0.01" />
+                </div>
+                <div id="bodySDiv" class="singleKnob">
+                    <label id="mknSLbl" for="mknS"> S </label>
+                    <input type="range" id="mknS" class="sliderKnobs" min="0.25" max="1" step="0.01" />
+                </div>
+                <!-- <div id="bodyHDiv" class="singleKnob">
+                    <label id="mknHLbl" for="mknH"> H </label>
+                    <input type="range" id="mknH" class="sliderKnobs" min="0.25" max="1" step="0.01" />
+                </div> -->
+                <div id="bodyRDiv" class="singleKnob">
+                    <label id="mknRLbl" for="mknR"> R </label>
+                    <input type="range" id="mknR" class="sliderKnobs" min="-180" max="180" step="0.01" />
+                </div>
+            </div>
+
+            <div id="mknHeadDiv" class="head-controls">
+                <div id="headXDiv" class="singleKnob">
+                    <label id="headXLbl" for="headX"> X </label>
+                    <input type="range" id="headX" class="sliderKnobs" min="-25" max="25" step="0.01" />
+                </div>
+                <div id="headYDiv" class="singleKnob">
+                    <label id="headYLbl" for="headY"> Y </label>
+                    <input type="range" id="headY" class="sliderKnobs" min="-325" max="-125" step="0.01" />
+                </div>
+                <div id="headWDiv" class="singleKnob">
+                    <label id="headWLbl" for="headW"> W </label>
+                    <input type="range" id="headW" class="sliderKnobs" min="1" max="3" step="0.01" />
+                </div>
+                <div id="headHDiv" class="singleKnob">
+                    <label id="headHLbl" for="headH"> H </label>
+                    <input type="range" id="headH" class="sliderKnobs" min="0.25" max="2" step="0.01" />
+                </div>
+                <div id="headRDiv" class="singleKnob">
+                    <label id="headRLbl" for="headR"> R </label>
+                    <input type="range" id="headR" class="sliderKnobs" min="-30" max="30" step="0.01" />
+                </div>
+            </div>
+
+            <div id="mknLipsDiv" class="lip-controls">
+                <div id="lipsXDiv" class="singleKnob">
+                    <label id="lipXLbl" for="lipX"> X </label>
+                    <input type="range" id="lipX" class="sliderKnobs" min="-50" max="50" step="0.01" />
+                </div>
+                <div id="lipsYDiv" class="singleKnob">
+                    <label id="lipYLbl" for="lipY"> Y </label>
+                    <input type="range" id="lipY" class="sliderKnobs" min="-20" max="20" step="0.01" />
+                </div>
+                <div id="lipsWDiv" class="singleKnob">
+                    <label id="lipWLbl" for="lipW"> W </label>
+                    <input type="range" id="lipW" class="sliderKnobs" min="0.25" max="1.5" step="0.01" />
+                </div>
+                <div id="lipsHDiv" class="singleKnob">
+                    <label id="lipHLbl" for="lipH"> H </label>
+                    <input type="range" id="lipH" class="sliderKnobs" min="0.25" max="2" step="0.01" />
+                </div>
+                <div id="lipsRDiv" class="singleKnob">
+                    <label id="lipRLbl" for="lipR"> R </label>
+                    <input type="range" id="lipR" class="sliderKnobs" min="-20" max="20" step="0.01" />
+                </div>
+            </div>
+        </div>
+        </p>
+        <!-- <p id="outputField">LOG</p> -->
+        <a id="image-dl" download="bigHair.png"></a>
+    </div>
+</div>
+
+<body>
+
+</body>
+
+<!-- Javascript------------------------------------------------------------------------------------------ -->
+
+<script>
+
+    (() => {
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js').then((registration) => {
+                    console.log('registered');
+                    console.log(registration);
+                }, (err) => {
+                    console.log(err);
+                });
+            });
+        } else {
+            alert('No service worker support in this browser');
+        }
+    })();
+
+    let windowW = window.innerWidth;
+    let windowH = window.innerHeight;
+
+    let canvasBtm = windowH - 135;
+
+    let svgNS = "http://www.w3.org/2000/svg";
+
+    let svgDim = 580;
+
+    let svgW = String(windowW), svgH = String(canvasBtm);
+
+    let mknSVG;
+    let neckPath;
+    let neckGroup;
+    let headGroup;
+    let headPath;
+    let facePath;
+    let lashPath;
+    let lipGroup;
+    let lip1Path;
+    let lip2Path;
+
+    let hairLayer = document.getElementById("hairLayer");
+    let gSpeedSldr = document.getElementById("gSpeedSldr");
+    let gSizeSldr = document.getElementById("gSizeSldr");
+
+    let lipCol = document.getElementById("lipCol");
+    let skinCol = document.getElementById("skinCol");
+    let hairCol = document.getElementById("hairCol");
+    let frameCol = document.getElementById("frameCol");
+    let frameW = document.getElementById("frameWSldr");
+    let bkgCol = document.getElementById("bkgCol");
+    let mknX = document.getElementById("mknX");
+    let mknY = document.getElementById("mknY");
+    let mknS = document.getElementById("mknS");
+    // let mknH = document.getElementById("mknH");
+    let mknR = document.getElementById("mknR");
+    let headW = document.getElementById("headW");
+    let headH = document.getElementById("headH");
+    let headX = document.getElementById("headX");
+    let headY = document.getElementById("headY");
+    let headR = document.getElementById("headR");
+    let lipW = document.getElementById("lipW");
+    let lipH = document.getElementById("lipH");
+    let lipX = document.getElementById("lipX");
+    let lipY = document.getElementById("lipY");
+    let lipR = document.getElementById("lipR");
+
+    let chooseCTRLS = document.getElementById("chooseCTRLS");
+    let bodyClass = document.querySelector(".body-controls");
+    let headClass = document.querySelector(".head-controls");
+    let lipClass = document.querySelector(".lip-controls");
+    let hairClass = document.querySelector(".hair-controls");
+    let frameClass = document.querySelector(".frame-control");
+
+    let mainControls = document.querySelector(".main-controls");
+    let controlsBtn = document.querySelector(".controls-btn");
+    let poseControls = document.querySelector(".pose-controls");
+
+    // let a = 1;
+    let saveBTN = document.getElementById("saveBTN");
+    let imageDL = document.getElementById('image-dl');
+
+
+    let bigHairCTX = document.getElementById("bigHairCNV").getContext("2d");
+    let hairBackCTX = document.getElementById("hairBackCNV").getContext("2d");
+    let mknCTX = document.getElementById("mknCNV").getContext("2d");
+    let hairFrntCTX = document.getElementById("hairFrntCNV").getContext("2d");
+    let frameCTX = document.getElementById("frameCNV").getContext("2d");
+
+    let gameDiv = document.getElementById("gameDiv");
+    let ctrlDiv = document.getElementById("ctrlDiv");
+    let outputField = document.getElementById("outputField");
+
+    window.addEventListener("resize", screenResize, false);
+    window.addEventListener("orientationchange", screenResize, false);
+
+    bigHairCTX.canvas.width = windowW;
+    bigHairCTX.canvas.height = canvasBtm;
+    hairBackCTX.canvas.width = windowW;
+    hairBackCTX.canvas.height = canvasBtm;
+    mknCTX.canvas.width = windowW;
+    mknCTX.canvas.height = canvasBtm;
+    hairFrntCTX.canvas.width = windowW;
+    hairFrntCTX.canvas.height = canvasBtm;
+    frameCTX.canvas.width = windowW
+    frameCTX.canvas.height = canvasBtm;
+
+
+
+
+
+
+    let mainSVG;
+    let mouseX = 0, mouseY = 0;
+    let active = false;
+
+    let hair = [];
+    let rad = 10;
+
+    hairFrntCTX.canvas.addEventListener("mousedown", joystickStartHandler, false);
+    hairFrntCTX.canvas.addEventListener("mousemove", joystickMoveHandler, false);
+    hairFrntCTX.canvas.addEventListener("mouseup", joystickStopHandler, false);
+    hairFrntCTX.canvas.addEventListener("touchstart", joystickStartHandler, false);
+    hairFrntCTX.canvas.addEventListener("touchmove", joystickMoveHandler, false);
+    hairFrntCTX.canvas.addEventListener("touchend", joystickStopHandler, false);
+
+    saveBTN.addEventListener("click", saveImage, false);
+    // saveBTN.addEventListener("touchstart", saveImage, false);
+
+    function joystickStartHandler(e) {
+        if (e.type === "touchstart") {
+            mouseX = e.touches[0].clientX + window.pageXOffset;
+            mouseY = e.touches[0].clientY + window.pageYOffset;
+        } else {
+            mouseX = e.clientX + window.pageXOffset;
+            mouseY = e.clientY + window.pageYOffset;
+        }
+
+        active = true;
+    }
+    function joystickMoveHandler(e) {
+        if (active) {
+            e.preventDefault();
+            if (e.type === "touchmove") {
+                mouseX = e.touches[0].clientX + window.pageXOffset;
+                mouseY = e.touches[0].clientY + window.pageYOffset;
+            } else {
+                mouseX = e.clientX + window.pageXOffset;
+                mouseY = e.clientY + window.pageYOffset;
+            }
+        }
+    }
+
+    function joystickStopHandler() {
+        active = false;
+    }
+
+    function growHair() {
+        let h = new Greng(hairBackCTX, hairFrntCTX, hairCol, mouseX, mouseY, gSizeSldr.value, gSizeSldr.value * 10, gSpeedSldr.value * -1, gSpeedSldr.value);
+
+        if (active) {
+            if ((mouseX > 10 && mouseX < window.innerWidth - 10) && (mouseY > 10 && mouseY < canvasBtm - 10)) {
+                hair.push(h);
+            }
+            return false;
+        }
+        if (!active) {
+            hair.pop(h);
+        }
+    }
+
+
+    function backgroundColor() {
+        bigHairCTX.beginPath();
+        bigHairCTX.rect(0, 0, bigHairCTX.canvas.width, bigHairCTX.canvas.height);
+        bigHairCTX.fillStyle = bkgCol.value;
+        bigHairCTX.fill();
+    }
+
+    function frameColor() {
+        frameCTX.beginPath();
+        // frameCTX.rect(0, 0, frameCTX.canvas.width, frameCTX.canvas.height);
+        frameCTX.fillStyle = frameCol.value;
+        frameCTX.fillRect(0, 0, frameCTX.canvas.width, frameCTX.canvas.height);
+        frameCTX.clearRect(frameW.value, frameW.value, frameCTX.canvas.width - frameW.value * 2, frameCTX.canvas.height - frameW.value * 2);
+    }
+
+    //***********************************************
+    buildSVG();
+    defaultVals();
+    controlsWidth();
+    updateAnimation();
+    //***********************************************
+
+    function buildSVG() {
+        svgParent();
+        svgTags();
+        svgIDs();
+        svgPaths();
+        svgAppends();
+        svgStyles();
+    }
+
+    controlsWidth();
+    function controlsWidth() {
+        gameDiv.style.width = windowW + "px";
+        gameDiv.style.height = (canvasBtm) + "px";
+        ctrlDiv.style.width = windowW + "px";
+        ctrlDiv.style.height = "140px"; //was 125
+
+        // console.log(window.innerWidth);
+        // mainControls.style.width = window.innerWidth + "px";
+        controlsBtn.style.width = window.innerWidth + "px";
+        // poseControls.style.width = window.innerWidth + "px";
+        ctrlDiv.style.width = window.innerWidth + "px";
+
+    }
+
+    function defaultVals() {
+        mknX.value = windowW / 2;
+        mknX.min = 0;
+        mknX.max = windowW;
+        mknY.value = windowH * 0.65;
+        mknY.min = svgDim / 2;
+        mknY.max = windowH;
+        mknR.value = 0;
+        mknS.value = 0.5;
+        // mknH.value = 0.5;
+
+        lipCol.value = "#990033";
+        skinCol.value = "#996633";
+        hairCol.value = "#566D7E";
+        bkgCol.value = "#E5E4E2";
+
+        frameCol.value = "#000000";
+        frameW.min = 0;
+        frameW.max = 200;
+        frameW.value = 50;
+
+        mknX.value = (windowW * 0.5) + "px";
+        mknY.value = ((canvasBtm) * 0.5) + "px";
+
+        headW.value = 1;
+        headH.value = 1;
+        headX.value = 0;
+        headY.value = -200;
+        headR.value = 0;
+        lipW.value = 1;
+        lipH.value = 1;
+        lipX.value = 0;
+        lipY.value = 0;
+        lipR.value = 0;
+    }
+
+    function svgParent() {
+        mknSVG = document.createElementNS(svgNS, "svg");
+        mknSVG.id = "mknSvgID";
+        mknSVG.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        mknSVG.setAttribute("width", svgW);
+        mknSVG.setAttribute("height", svgH);
+        mknSVG.setAttribute("viewBox", 0 + " " + 0 + " " + svgW + " " + svgH);
+        mknSVG.setAttribute("version", "1.1");
+        mknSVG.setAttribute("shape-rendering", "geometricPrecision");
+        mknSVG.setAttribute("pointer-events", "none");
+    }
+    function svgIDs() {
+        neckGroup.id = "neckGID";
+        neckPath.id = "neckPathID";
+        headGroup.id = "headGID";
+        headPath.id = "headPathID";
+        facePath.id = "facePathID";
+        lashPath.id = "lashPathID";
+        lipGroup.id = "lipGID";
+        lip1Path.id = "lip1PathID";
+        lip2Path.id = "lip2PathID";
+    }
+    function svgTags() {
+        neckGroup = document.createElementNS(svgNS, "g");
+        neckPath = document.createElementNS(svgNS, "path");
+        headGroup = document.createElementNS(svgNS, "g");
+        headPath = document.createElementNS(svgNS, "path");
+        facePath = document.createElementNS(svgNS, "path");
+        lashPath = document.createElementNS(svgNS, "path");
+        lipGroup = document.createElementNS(svgNS, "g");
+        lip1Path = document.createElementNS(svgNS, "path");
+        lip2Path = document.createElementNS(svgNS, "path");
+    }
+    function svgRemove() {
+        neckGroup.remove();
+        neckPath.remove();
+        headGroup.remove();
+        headPath.remove();
+        facePath.remove();
+        lashPath.remove();
+        lipGroup.remove();
+        lip1Path.remove();
+        lip2Path.remove();
+    }
+
+    function changeStyles() {
+        facePath.style.fill = drkHEX(skinCol.value, -1);
+        lip1Path.style.fill = lipCol.value;
+        lip1Path.style.stroke = drkHEX(lipCol.value, 5);
+        lip2Path.style.fill = drkHEX(lipCol.value, -5);
+        headPath.style.fill = skinCol.value;
+        headPath.style.stroke = drkHEX(skinCol.value, 10);
+        neckPath.style.fill = drkHEX(skinCol.value, 3);
+        neckPath.style.stroke = drkHEX(skinCol.value, 10);
+    }
+    function svgStyles() {
+        mknSVG.setAttribute("style", "overflow:visible; z-index:-1;");
+        neckPath.setAttribute("style", "overflow:visible;");
+        headPath.setAttribute("style", "overflow:visible;");
+        facePath.setAttribute("style", "overflow:visible;");
+        lashPath.setAttribute("style", "overflow:visible;");
+        lip1Path.setAttribute("style", "overflow:visible;");
+        lip2Path.setAttribute("style", "overflow:visible;");
+    }
+    function svgTransforms() {
+        mknSVG.setAttribute("transform", "translate(" + 0 + "," + (0) + "), scale(1, 1), rotate(0)");
+        neckGroup.setAttribute("transform", "translate(" + mknX.value + "," + mknY.value + "), rotate(" + mknR.value + "), scale(" + mknS.value + "," + mknS.value + ")");
+        headGroup.setAttribute("transform", "translate(" + headX.value + "," + headY.value + "), rotate(" + headR.value + "), scale(" + headW.value + "," + headH.value + ")");
+        lipGroup.setAttribute("transform", "translate(" + lipX.value + "," + lipY.value + "), rotate(" + lipR.value + "), scale(" + lipW.value + "," + lipH.value + ")");
+    }
+    function svgPaths() {
+        neckPath.setAttribute("d", "M-77.017 -208.654c-2.919,11.299 -3.263,19.454 -2.785,27.031 0.706,11.168 3.2,21.079 1.871,37.946 -1.021,12.963 -3.62,22.704 -7.567,30.951 -4.674,9.765 -11.238,17.439 -19.311,25.887 -14.894,15.587 -155.211,33.165 -173.094,56.516 -17.882,23.351 -15.795,43.723 -0.137,49.378 81.722,10.399 192.925,31.196 275.165,31.196 82.239,0 193.443,-20.797 275.166,-31.196 15.658,-5.655 17.745,-26.027 -0.138,-49.378 -17.882,-23.351 -158.201,-40.929 -173.094,-56.516 -8.073,-8.448 -14.638,-16.122 -19.311,-25.887 -3.947,-8.247 -6.546,-17.988 -7.567,-30.951 -1.329,-16.867 1.165,-26.778 1.87,-37.946 0.479,-7.577 0.135,-15.732 -2.784,-27.031 -5.054,-19.561 -36.307,-41.496 -74.142,-40.111 -37.835,-1.385 -69.089,20.55 -74.142,40.111z");
+        headPath.setAttribute("d", "M-115.328 -144.084c-7.717,-5.569 -12.032,-17.333 -23.505,-17.333 -6.965,0 -7.423,10.195 -7.423,16 0,13.139 6.495,10.402 10.221,38.317 1.361,10.192 13.567,37.579 18.257,46.989 2.101,4.215 4.048,6.554 9.872,6.694 6.002,45.609 20.175,65.339 32.324,81.826 10.681,14.495 30.61,40.039 46.331,47.388 9.987,4.669 18.764,4.206 29.251,4.112 10.486,0.094 19.264,0.557 29.25,-4.112 15.721,-7.349 35.65,-32.893 46.331,-47.388 12.149,-16.487 26.323,-36.217 32.324,-81.826 5.824,-0.14 7.772,-2.479 9.872,-6.694 4.69,-9.41 16.896,-36.797 18.257,-46.989 3.727,-27.915 10.221,-25.178 10.221,-38.317 0,-5.805 -0.458,-16 -7.423,-16 -11.473,0 -15.787,11.764 -23.505,17.333 0,-34.227 -0.991,-63.774 -7.535,-88.714 -7.301,-27.825 -21.514,-49.917 -48.972,-66.381 -20.792,-12.466 -36.781,-15.123 -58.82,-15.514 -22.04,0.391 -38.029,3.048 -58.82,15.514 -27.459,16.464 -41.672,38.556 -48.973,66.381 -6.544,24.94 -7.535,54.487 -7.535,88.714z");
+        facePath.setAttribute("d", "M2.874 79.944c7.478,0.099 7.414,0.042 16.376,-4.147 15.718,-7.346 17.414,-12.001 28.091,-26.491 12.144,-16.483 23.82,-27.81 30.206,-47.886 9.253,-29.086 43.072,-63.93 27.781,-105.504 -14.361,-39.045 -0.24,-96.558 -6.781,-121.495 -7.297,-27.822 -12.269,-37.136 -39.727,-53.6 -20.792,-12.467 -36.781,-15.123 -58.82,-15.514 -22.04,0.391 -38.029,3.047 -58.82,15.514 -27.459,16.464 -32.43,25.778 -39.727,53.6 -6.542,24.937 7.579,82.45 -6.781,121.495 -15.292,41.574 18.528,76.418 27.78,105.504 6.386,20.076 18.062,31.403 30.207,47.886 10.676,14.49 12.372,19.145 28.09,26.491 8.962,4.189 8.898,4.246 16.376,4.147 1.175,1.476 2.153,1.54 2.875,-0.035 0.721,1.575 1.7,1.511 2.874,0.035z");
+        lashPath.setAttribute("d", "M-89.889 -122.253c0,0 0.241,4.492 5.386,9.075 2.149,1.914 5.156,3.845 9.359,5.47 7.924,3.063 14.593,3.898 23.2,4.36 6.884,0.369 15.008,0.499 26.006,1.339 -10.067,2.967 -22.346,6.419 -34.184,7.478 -11.616,1.04 -22.808,-0.224 -31.07,-6.511 -5.592,-4.255 -7.288,-8.041 -7.072,-11.194 0.428,-6.253 8.375,-10.017 8.375,-10.017zm177.901 0c0,0 -0.241,4.492 -5.386,9.075 -2.149,1.914 -5.156,3.845 -9.359,5.47 -7.923,3.063 -14.593,3.898 -23.2,4.36 -6.884,0.369 -15.008,0.499 -26.006,1.339 10.067,2.967 22.346,6.419 34.184,7.478 11.616,1.04 22.808,-0.224 31.07,-6.511 5.592,-4.255 7.288,-8.041 7.072,-11.194 -0.428,-6.253 -8.375,-10.017 -8.375,-10.017z");
+        lip1Path.setAttribute("d", "M-52.978 -4.021c5.015,7.489 10.977,14.722 17.641,21.025 4.619,4.37 10.279,6.844 16.529,8.221 5.873,1.293 12.266,1.618 18.808,1.635 6.542,-0.017 12.935,-0.342 18.807,-1.635 6.25,-1.377 11.91,-3.851 16.53,-8.221 6.663,-6.303 12.626,-13.536 17.641,-21.025 -3.262,-2.184 -6.797,-4.306 -10.136,-6.649 -2.465,-1.729 -4.824,-3.58 -6.885,-5.664 -6.248,-6.314 -11.474,-9.155 -15.924,-10.11 -9.785,-2.1 -14.283,4.453 -20.033,4.194 -5.751,0.259 -10.249,-6.294 -20.034,-4.194 -4.449,0.955 -9.676,3.796 -15.923,10.11 -2.062,2.084 -4.42,3.935 -6.886,5.664 -3.338,2.343 -6.874,4.465 -10.135,6.649z");
+        lip2Path.setAttribute("d", "M-52.978 -4.021c5.015,7.489 10.977,14.722 17.641,21.025 4.619,4.37 10.279,6.844 16.529,8.221 5.873,1.293 12.266,1.618 18.808,1.635 6.542,-0.017 12.935,-0.342 18.807,-1.635 6.25,-1.377 11.91,-3.851 16.53,-8.221 6.663,-6.303 12.626,-13.536 17.641,-21.025 -3.262,0.149 -6.152,2.487 -10.136,3.351 -8.031,1.742 -17.437,-4.623 -22.809,-5.774 -9.782,-2.096 -14.283,2.619 -20.033,2.361 -5.751,0.258 -10.252,-4.457 -20.034,-2.361 -5.372,1.151 -16.112,7.017 -22.809,5.774 -4.009,-0.743 -6.118,-3.226 -10.135,-3.351z");
+    }
+    function svgAppends() {
+        document.body.appendChild(mknSVG);
+        mknSVG.appendChild(neckGroup);
+        neckGroup.appendChild(neckPath);
+        neckGroup.appendChild(headGroup);
+        headGroup.appendChild(headPath);
+        headGroup.appendChild(facePath);
+        headGroup.appendChild(lashPath);
+        headGroup.appendChild(lipGroup);
+        lipGroup.appendChild(lip1Path);
+        lipGroup.appendChild(lip2Path);
+    }
+
+
+
+
+
+    function updateAnimation() {
+        setTimeout(function () {
+            //Create the animation loop
+            requestAnimationFrame(updateAnimation);
+            renderImage();
+            windowW = window.innerWidth;
+            windowH = window.innerHeight;
+
+            canvasBtm = windowH - 135;
+
+            // outputData(mouseY, bigHairCTX.canvas.offsetTop, window.pageXOffset);
+
+            // console.log(bigHairCTX.canvas.offsetTop);
+
+        }, 1000 / 60);
+    }
+    function renderImage() {
+        clearisil();
+        backgroundColor();
+        frameColor();
+        changeStyles();
+        svgTransforms();
+        // ctrlPos();
+        growHair();
+        toggleCTRLS();
+
+        for (let i = 0; i < hair.length; i++) {
+            hair[i].show();
+            hair[i].grow();
+        }
+    }
+    function clearisil() {
+        bigHairCTX.clearRect(0, 0, windowW, windowH);
+        // hairBackCTX.clearRect(0, 0, windowW, windowH);
+        // hairFrntCTX.clearRect(0, 0, windowW, windowH);
+        // frameCTX.clearRect(0, 0, windowW, windowH);
+    }
+
+
+    function toggleCTRLS() {
+
+        switch (chooseCTRLS.value) {
+            case "hair":
+                bodyClass.setAttribute("style", "display: none");
+                headClass.setAttribute("style", "display: none");
+                lipClass.setAttribute("style", "display: none");
+                frameClass.setAttribute("style", "display: none");
+                hairClass.setAttribute("style", "display: grid");
+
+                break;
+            case "body":
+                bodyClass.setAttribute("style", "display: grid");
+                headClass.setAttribute("style", "display: none");
+                lipClass.setAttribute("style", "display: none");
+                frameClass.setAttribute("style", "display: none");
+                hairClass.setAttribute("style", "display: none");
+                break;
+            case "head":
+                bodyClass.setAttribute("style", "display: none");
+                headClass.setAttribute("style", "display: grid");
+                lipClass.setAttribute("style", "display: none");
+                frameClass.setAttribute("style", "display: none");
+                hairClass.setAttribute("style", "display: none");
+                break;
+            case "lips":
+                bodyClass.setAttribute("style", "display: none");
+                headClass.setAttribute("style", "display: none");
+                lipClass.setAttribute("style", "display: grid");
+                frameClass.setAttribute("style", "display: none");
+                hairClass.setAttribute("style", "display: none");
+                break;
+            case "frame":
+                bodyClass.setAttribute("style", "display: none");
+                headClass.setAttribute("style", "display: none");
+                lipClass.setAttribute("style", "display: none");
+                frameClass.setAttribute("style", "display: grid");
+                hairClass.setAttribute("style", "display: none");
+                break;
+            default:
+                bodyClass.setAttribute("style", "display: none");
+                headClass.setAttribute("style", "display: none");
+                lipClass.setAttribute("style", "display: none");
+                frameClass.setAttribute("style", "display: none");
+                hairClass.setAttribute("style", "display: grid");
+        }
+    }
+
+    function screenResize() {
+        clearisil();
+
+
+
+        windowW = window.innerWidth;
+        windowH = window.innerHeight;
+        canvasBtm = windowH - 135;
+        bigHairCTX.canvas.width = windowW;
+        bigHairCTX.canvas.height = canvasBtm;
+        hairBackCTX.canvas.width = windowW;
+        hairBackCTX.canvas.height = canvasBtm;
+        hairFrntCTX.canvas.width = windowW;
+        hairFrntCTX.canvas.height = canvasBtm;
+        frameCTX.canvas.width = windowW
+        frameCTX.canvas.height = canvasBtm;
+
+        mknSVG.setAttribute("width", svgW);
+        mknSVG.setAttribute("height", svgH);
+        controlsWidth();
+        // console.log(windowW);
+        defaultVals()
+        changeStyles();
+        svgTransforms();
+        toggleCTRLS();
+
+    }
+
+
+
+    function triggerDownload(imgURI) {
+
+        let evt = new MouseEvent('click', {
+            view: window,
+            bubbles: false,
+            cancelable: true
+        });
+
+        imageDL.setAttribute('href', imgURI);
+
+        // let a = document.createElement('a');
+        // a.setAttribute('download', 'bigHair.png');
+        // a.setAttribute('href', imgURI);
+
+        // a.setAttribute('target', '_blank'); // breaks mobile
+
+        imageDL.dispatchEvent(evt);
+    }
+
+    function saveImage() {
+
+        var data = (new XMLSerializer()).serializeToString(mknSVG);
+        var DOMURL = window.URL || window.webkitURL || window; //returns the full URL of the current HTML document
+
+        var img = new Image();
+        var svgBlob = new Blob([data], { type: 'image/svg+xml' }); //removed: "; charset=UTF-8"
+        var url = DOMURL.createObjectURL(svgBlob); //creates a DOMString containing a URL representing the object given
+
+        img.onload = function () { //anonymous function triggered when image loads
+            bigHairCTX.drawImage(hairBackCTX.canvas, 0, 0);
+            bigHairCTX.drawImage(img, 0, 0);
+            bigHairCTX.drawImage(frameCTX.canvas, 0, 0);
+            bigHairCTX.drawImage(hairFrntCTX.canvas, 0, 0);
+            DOMURL.revokeObjectURL(url);
+
+            var imgURI = bigHairCTX.canvas.toDataURL('image/png'); //removed: ".replace('image/png', 'image/octet-stream')"
+
+            triggerDownload(imgURI);
+        };
+
+        img.src = url;
+    };
+
+    //objects
+    class Greng {
+        constructor(ctx1, ctx2, tempCol, tempX, tempY, tempSizeLo, tempSizeHi, tempSpeedLo, tempSpeedHi) {
+            this.ctx1 = ctx1;
+            this.ctx2 = ctx2;
+            // this.ctxCTRL = ctxCTRL;
+            this.col = tempCol;
+            this.x = tempX;
+            this.y = tempY;
+            this.sizeLo = tempSizeLo / 20;
+            this.sizeHi = tempSizeHi / 10;
+            this.speedLo = tempSpeedLo;
+            this.speedHi = tempSpeedHi;
+            // this.a = 0;
+
+
+            this.show = function () {
+
+                switch (hairLayer.value) {
+                    case "front":
+                        ctx2.beginPath();
+                        ctx2.arc(this.x, this.y, randomInt(this.sizeLo, this.sizeHi), 0, 2 * Math.PI);
+                        ctx2.fillStyle = this.col.value;
+                        ctx2.strokeStyle = drkHEX(this.col.value, 15);
+                        ctx2.fill();
+                        ctx2.stroke();
+                        break;
+                    case "back":
+                        ctx1.beginPath();
+                        ctx1.arc(this.x, this.y, randomInt(this.sizeLo, this.sizeHi), 0, 2 * Math.PI);
+                        ctx1.fillStyle = this.col.value;
+                        ctx1.strokeStyle = drkHEX(this.col.value, 15);
+                        ctx1.fill();
+                        ctx1.stroke();
+                        break;
+                    default:
+                        ctx2.beginPath();
+                        ctx2.arc(this.x, this.y, randomInt(this.sizeLo, this.sizeHi), 0, 2 * Math.PI);
+                        ctx2.fillStyle = this.col.value;
+                        ctx2.strokeStyle = drkHEX(this.col.value, 15);
+                        ctx2.fill();
+                        ctx2.stroke();
+                }
+
+            }
+
+            this.grow = function () {
+
+                this.x = this.x + randomInt(this.speedLo, this.speedHi);
+                this.y = this.y + randomInt(this.speedLo, this.speedHi);
+                // this.a = this.a + 1;
+
+
+                // if(this.sizeHi > 5){
+                // this.sizeHi = this.sizeHi - 1;
+                // }
+                // if(this.sizeLo > 5){
+                //   this.sizeLo = this.sizeLo - 1;
+                //   }
+
+            }
+
+            this.trap = function () {
+                // this.newX = this.newX;
+                // this.newY = this.newY;
+            }
+            // 
+        }
+    }
+
+    //utilities------------------------------------------------------------
+
+
+    function outputData(x, y, z) {
+        let outputString0 = String(x);
+        let outputString1 = String(y);
+        let outputString2 = String(z);
+        outputField.innerHTML = outputString0 + ", " + outputString1 + ", " + outputString2;
+        // outputField.innerHTML = "2020 COPYRIGHT ROGER MCCOLLIN & ALLAN JACKSON";
+    }
+
+    function drkHEX(H, drk) {
+        // Convert hex to RGB first
+        let r = 0, g = 0, b = 0;
+        if (H.length == 4) {
+            r = "0x" + H[1] + H[1];
+            g = "0x" + H[2] + H[2];
+            b = "0x" + H[3] + H[3];
+        } else if (H.length == 7) {
+            r = "0x" + H[1] + H[2];
+            g = "0x" + H[3] + H[4];
+            b = "0x" + H[5] + H[6];
+        }
+        // Then to HSL
+        r /= 255;
+        g /= 255;
+        b /= 255;
+        let cmin = Math.min(r, g, b),
+            cmax = Math.max(r, g, b),
+            delta = cmax - cmin,
+            h = 0,
+            s = 0,
+            l = 0;
+
+        if (delta == 0)
+            h = 0;
+        else if (cmax == r)
+            h = ((g - b) / delta) % 6;
+        else if (cmax == g)
+            h = (b - r) / delta + 2;
+        else
+            h = (r - g) / delta + 4;
+
+        h = Math.round(h * 60);
+
+        if (h < 0)
+            h += 360;
+
+        l = (cmax + cmin) / 2;
+        s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+        s = +(s * 100).toFixed(1);
+        l = Math.abs(+(l * 100).toFixed(1) - drk);
+
+        //back to rgb
+        s /= 100;
+        l /= 100;
+
+        let c = (1 - Math.abs(2 * l - 1)) * s,
+            x = c * (1 - Math.abs((h / 60) % 2 - 1)),
+            m = l - c / 2;
+        // r = 0,
+        // g = 0,
+        // b = 0;
+
+        if (0 <= h && h < 60) {
+            r = c; g = x; b = 0;
+        } else if (60 <= h && h < 120) {
+            r = x; g = c; b = 0;
+        } else if (120 <= h && h < 180) {
+            r = 0; g = c; b = x;
+        } else if (180 <= h && h < 240) {
+            r = 0; g = x; b = c;
+        } else if (240 <= h && h < 300) {
+            r = x; g = 0; b = c;
+        } else if (300 <= h && h < 360) {
+            r = c; g = 0; b = x;
+        }
+        // Having obtained RGB, convert channels to hex
+        r = Math.round((r + m) * 255).toString(16);
+        g = Math.round((g + m) * 255).toString(16);
+        b = Math.round((b + m) * 255).toString(16);
+
+        // Prepend 0s, if necessary
+        if (r.length == 1)
+            r = "0" + r;
+        if (g.length == 1)
+            g = "0" + g;
+        if (b.length == 1)
+            b = "0" + b;
+
+        return "#" + r + g + b;
+    }
+
+    function randomInt(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+</script>
